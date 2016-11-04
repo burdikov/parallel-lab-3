@@ -24,7 +24,7 @@ namespace Prlel_LAB_3
         const int M = 4;
                         
         /// <summary>Количество сообщений</summary>
-        const int X = 400000;
+        const int X = 10000;
 
         /// <summary>Массив массивов сообщений</summary>
         static string[][] messages = new string[N][];
@@ -224,7 +224,10 @@ namespace Prlel_LAB_3
             while (eventFull.WaitOne())
             {
                 if (isFinished)
+                {
+                    eventFull.Set();
                     break;
+                }
                 vault[2].Add(buffer);
                 eventEmpty.Set();
             }
@@ -267,11 +270,8 @@ namespace Prlel_LAB_3
                 writers[i].Join();
             }
             isFinished = true;
-            for (int i = 0; i < M; i++)
-            {
-                eventFull.Set();
-                Thread.Sleep(0);
-            }
+            eventFull.Set();
+
             for (int i = 0; i < M; i++)
             {
                 readers[i].Join();
@@ -304,7 +304,11 @@ namespace Prlel_LAB_3
         {
             while (semFull.WaitOne())
             {
-                if (isFinished) return;
+                if (isFinished)
+                {
+                    semFull.Release();
+                    break;
+                }
                 vault[3].Add(buffer);
                 semEmpty.Release();
             }
@@ -337,18 +341,7 @@ namespace Prlel_LAB_3
 
             isFinished = true;
 
-            for (int i = 0; i < M; i++)
-            {
-                try
-                {
-                    semFull.Release();
-                }
-                catch (Exception)
-                {
-
-                }
-                Thread.Sleep(0);
-            }
+            semFull.Release();
 
             for (int i = 0; i < M; i++)
             {
