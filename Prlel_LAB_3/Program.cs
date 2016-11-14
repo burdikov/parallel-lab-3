@@ -392,11 +392,6 @@ namespace Prlel_LAB_3
             {
                 readers[i].Join();
             }
-
-            for (int i = 0; i < M; i++)
-            {
-                readers[i].Join();
-            }
             timer.Stop();
 
             Console.WriteLine("Время: " + timer.ElapsedMilliseconds);
