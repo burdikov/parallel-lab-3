@@ -57,29 +57,11 @@ namespace Prlel_LAB_3
             V3();
             V4();
             V5();
-
-
-
-            /*/Сверка массивов
-            for (int i = 0; i < 5; i++)
-            {
-              vault[i].Sort();
-            }
-
-            bool ok = true;
-            for (int i = 0; i < X*N; i++)
-            {
-              if (vault[1][i] != vault[4][i]) ok = false;
-            }
-            if (ok) Console.WriteLine("Всё ок"); else Console.WriteLine("Не всё ок");
-            //*/
-
+            
             Console.ReadKey();
         }
 
-        //==========================================================
-        // Секция 1. Отсутствие синхронизации потоков
-        //==========================================================
+        #region Отсутствие синхронизации
 
         static void V1_Read()
         {
@@ -140,13 +122,9 @@ namespace Prlel_LAB_3
 
             Console.WriteLine("Время: " + timer.ElapsedMilliseconds);
         }
+        #endregion
 
-        //**********************************************************
-
-        //==========================================================
-        // Секция 2. Lock
-        //==========================================================
-
+        #region Lock
         static void V2_Write(object o)
         {
             int myNumber = (int)o;
@@ -209,13 +187,9 @@ namespace Prlel_LAB_3
 
             Console.WriteLine("Время: " + timer.ElapsedMilliseconds);
         }
+        #endregion
 
-        //**********************************************************
-
-        //==========================================================
-        // Секция 3. AutoResetEvent
-        //==========================================================
-
+        #region AutoResetEvent
         static AutoResetEvent eventFull = new AutoResetEvent(false);
         static AutoResetEvent eventEmpty = new AutoResetEvent(true);
 
@@ -280,12 +254,9 @@ namespace Prlel_LAB_3
 
             Console.WriteLine("Время: " + timer.ElapsedMilliseconds);
         }
-        //**********************************************************
+        #endregion
 
-        //==========================================================
-        // Секция 4. Semaphore
-        //==========================================================
-
+        #region Semaphore
         static Semaphore semEmpty = new Semaphore(1,1);
         static Semaphore semFull = new Semaphore(0,1);
 
@@ -351,13 +322,9 @@ namespace Prlel_LAB_3
 
             Console.WriteLine("Время: " + timer.ElapsedMilliseconds);
         }
+        #endregion
 
-        //**********************************************************
-
-        //==========================================================
-        // Секция 5. Атомарные операции
-        //==========================================================
-
+        #region Interlocked
         static int allowREAD = 0;
         static int allowWRITE = 1;
 
@@ -407,8 +374,7 @@ namespace Prlel_LAB_3
                     allowWRITE = 1;
                 }
             }
-
-    }
+        }
 
         static void V5_Write(object o)
         {
@@ -423,8 +389,6 @@ namespace Prlel_LAB_3
                 }
             }
         }
-
-        //**********************************************************
-
+        #endregion
     }
 }
